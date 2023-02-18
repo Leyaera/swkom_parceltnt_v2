@@ -21,7 +21,6 @@ import javax.annotation.Generated;
  */
 
 @JsonTypeName("parcel")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-02-18T16:02:14.309709Z[Etc/UTC]")
 public class Parcel {
 
   @JsonProperty("weight")
