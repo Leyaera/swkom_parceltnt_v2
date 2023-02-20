@@ -8,11 +8,12 @@ import java.util.List;
 
 @Entity
 public class ParcelEntity {
-
     @Id
     @Pattern(regexp = "^[A-Z0-9]{9}$")
     private String trackingId;
 
     @Min(0) //@Positive
     private Float weight;
+
+
 }
