@@ -1,4 +1,4 @@
-package at.fhtw.swen3.persistence.validation;
+package at.fhtw.swen3.services.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

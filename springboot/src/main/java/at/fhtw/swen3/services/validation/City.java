@@ -1,5 +1,4 @@
-package at.fhtw.swen3.persistence.validation;
-
+package at.fhtw.swen3.services.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = StreetValidator.class)
+@Constraint(validatedBy = CityValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Street {
-    String message() default "Street does not match pattern.";
+public @interface City {
+    String message() default "City does not match pattern.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
