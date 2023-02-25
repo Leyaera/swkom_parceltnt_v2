@@ -18,4 +18,9 @@ public class RecipientEntity {
     private String postalCode;
     private String city;
     private String country;
+
+    @Id
+    public Long getId() {
+        return id;
+    }
 }
