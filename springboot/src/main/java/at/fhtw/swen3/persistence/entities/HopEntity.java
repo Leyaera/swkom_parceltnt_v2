@@ -20,14 +20,12 @@ public class HopEntity {
 
     private String code;
 
-    @Pattern(regexp = "^[A-Z]{4}\\d{1,4}$")
     private String description;
 
     private Integer processingDelayMins;
 
     private String locationName;
 
-    @NotNull
     @OneToOne
     private GeoCoordinateEntity locationCoordinates;
 
@@ -35,4 +33,6 @@ public class HopEntity {
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) { this.id = id; }
 }
