@@ -2,7 +2,6 @@ package at.fhtw.swen3.persistence.entities;
 
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public enum State {
     PICKUP("Pickup"),
 
@@ -15,4 +14,8 @@ public enum State {
     DELIVERED("Delivered");
 
     private String value;
+
+    State(String value) {
+        this.value = value;
+    }
 }

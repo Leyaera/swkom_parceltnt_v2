@@ -11,11 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Entity
 public class ParcelEntity {
     @Id
     @Pattern(regexp = "^[A-Z0-9]{9}$")
@@ -41,4 +39,73 @@ public class ParcelEntity {
     @OneToMany
     @NotNull
     private List<HopArrivalEntity> futureHops;
+
+    public ParcelEntity(String trackingId, Float weight, RecipientEntity recipient, RecipientEntity sender, State state, List<HopArrivalEntity> visitedHops, List<HopArrivalEntity> futureHops) {
+        this.trackingId = trackingId;
+        this.weight = weight;
+        this.recipient = recipient;
+        this.sender = sender;
+        this.state = state;
+        this.visitedHops = visitedHops;
+        this.futureHops = futureHops;
+    }
+
+    public ParcelEntity() {
+    }
+
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
+    public RecipientEntity getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(RecipientEntity recipient) {
+        this.recipient = recipient;
+    }
+
+    public RecipientEntity getSender() {
+        return sender;
+    }
+
+    public void setSender(RecipientEntity sender) {
+        this.sender = sender;
+    }
+
+    public String getTrackingId() {
+        return trackingId;
+    }
+
+    public void setTrackingId(String trackingId) {
+        this.trackingId = trackingId;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public List<HopArrivalEntity> getVisitedHops() {
+        return visitedHops;
+    }
+
+    public void setVisitedHops(List<HopArrivalEntity> visitedHops) {
+        this.visitedHops = visitedHops;
+    }
+
+    public List<HopArrivalEntity> getFutureHops() {
+        return futureHops;
+    }
+
+    public void setFutureHops(List<HopArrivalEntity> futureHops) {
+        this.futureHops = futureHops;
+    }
 }
