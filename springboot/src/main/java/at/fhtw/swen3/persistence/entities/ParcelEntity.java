@@ -11,12 +11,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class ParcelEntity {
     @Id
-    @Pattern(regexp = "^[A-Z0-9]{9}$")
+    @Pattern(regexp = "^[A-Z0-9]{9}$", message = "tracking id has a length of 9 must only be upper letters and numbers.")
     private String trackingId;
 
     @Min(0) //@Positive

@@ -16,7 +16,7 @@ public class NameValidator implements ConstraintValidator<Name, RecipientEntity>
     }
     public boolean isValid(RecipientEntity recipient, ConstraintValidatorContext constraintValidatorContext) {
         if("Österreich".equals(recipient.getCountry()) || "Austria".equals(recipient.getCountry())) {
-            return NAME_PATTERN.matcher(recipient.getCity()).matches();
+            return NAME_PATTERN.matcher(recipient.getName()).matches();
         } else {
             return true;
         }

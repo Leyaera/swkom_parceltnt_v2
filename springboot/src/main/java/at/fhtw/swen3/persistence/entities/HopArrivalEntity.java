@@ -12,6 +12,8 @@ public class HopArrivalEntity {
     private String code;
     private String description;
     private OffsetDateTime dateTime;
+
+    @Id
     private Long id;
 
     @Id
