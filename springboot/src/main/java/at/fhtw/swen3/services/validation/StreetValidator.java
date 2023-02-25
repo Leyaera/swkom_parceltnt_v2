@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class StreetValidator implements ConstraintValidator<Street, RecipientEntity> {
-    private static final Pattern STREET_PATTERN = Pattern.compile(".*"); //FIXME
+    private static final Pattern STREET_PATTERN = Pattern.compile("[A-Z ][a-zA-Zß ]+\\s[0-9a-z\\/\\-]+");
 
     @Override
     public void initialize(Street constraintAnnotation) {

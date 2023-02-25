@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class PostalCodeValidator implements ConstraintValidator<PostalCode, RecipientEntity> {
 
-    private static final Pattern POSTALCODE_PATTERN = Pattern.compile("^A-[0-9][0-9][0-9][0-9]");
+    private static final Pattern POSTALCODE_PATTERN = Pattern.compile("^A-[0-9]{4}");
 
     @Override
     public void initialize(PostalCode constraintAnnotation) {

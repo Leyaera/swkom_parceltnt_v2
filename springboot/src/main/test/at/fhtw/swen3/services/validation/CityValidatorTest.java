@@ -2,7 +2,6 @@ package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
