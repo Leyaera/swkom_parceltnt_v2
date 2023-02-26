@@ -15,32 +15,38 @@ import java.util.List;
 public class ParcelEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @Column
     private Long id;
 
-    @Pattern(regexp = "^[A-Z0-9]{9}$", message = "tracking id has a length of 9 must only be upper letters and numbers.")
-    //@NotNull(message = "Tracking-ID can not be null!")
-    private String trackingId;
-
+    @Column
     @DecimalMin(value = "1.0",message ="weight must be at least 1.0")
     @NotNull(message = "Weight can not be null!")
     private Float weight;
 
     @OneToOne
+    @JoinColumn(name = "recipient_id")
     @NotNull(message = "Recipient can not be null!")
     private RecipientEntity recipient;
 
     @OneToOne
+    @JoinColumn(name = "sender_id")
     @NotNull(message = "Sender can not be null!")
     private RecipientEntity sender;
 
+    @Column
+    @Pattern(regexp = "^[A-Z0-9]{9}$", message = "tracking id has a length of 9 must only be upper letters and numbers.")
+    //@NotNull(message = "Tracking-ID can not be null!")
+    private String trackingId;
+
+    @Column
     @NotNull(message = "State can not be null!")
     private State state;
 
-    @OneToMany
+    @OneToMany(mappedBy = "visitedHops")
     @NotNull
     private List<HopArrivalEntity> visitedHops;
 
-    @OneToMany
+    @OneToMany(mappedBy = "futureHops")
     @NotNull
     private List<HopArrivalEntity> futureHops;
 

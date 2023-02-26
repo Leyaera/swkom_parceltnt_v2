@@ -1,18 +1,18 @@
 package at.fhtw.swen3.persistence.entities;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class GeoCoordinateEntity {
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @Column
+    public Long id;
 
+    @Column
     private Double lat;
 
+    @Column
     private Double lon;
 
     @Id

@@ -1,32 +1,32 @@
 package at.fhtw.swen3.persistence.entities;
 
-import at.fhtw.swen3.services.dto.GeoCoordinate;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.persistence.*;
 
 @Entity
 public class HopEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @Column
     private Long id;
+
+    @Column
     private String hopType;
 
+    @Column
     private String code;
 
+    @Column
     private String description;
 
+    @Column
     private Integer processingDelayMins;
 
+    @Column
     private String locationName;
 
     @OneToOne
+    @JoinColumn(name = "geoCoordinage_id")
     private GeoCoordinateEntity locationCoordinates;
 
     @Id
@@ -35,4 +35,52 @@ public class HopEntity {
     }
 
     public void setId(Long id) { this.id = id; }
+
+    public String getHopType() {
+        return hopType;
+    }
+
+    public void setHopType(String hopType) {
+        this.hopType = hopType;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getProcessingDelayMins() {
+        return processingDelayMins;
+    }
+
+    public void setProcessingDelayMins(Integer processingDelayMins) {
+        this.processingDelayMins = processingDelayMins;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public GeoCoordinateEntity getLocationCoordinates() {
+        return locationCoordinates;
+    }
+
+    public void setLocationCoordinates(GeoCoordinateEntity locationCoordinates) {
+        this.locationCoordinates = locationCoordinates;
+    }
 }
