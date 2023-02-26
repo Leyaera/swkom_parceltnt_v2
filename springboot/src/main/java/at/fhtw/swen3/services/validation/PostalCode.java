@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PostalCode {
-    String message() default "Postal code does not match pattern.";
+    String message() default "In Austria: Postal code must match pattern.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

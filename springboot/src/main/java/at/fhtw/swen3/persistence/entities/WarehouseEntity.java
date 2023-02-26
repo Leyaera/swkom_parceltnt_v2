@@ -35,8 +35,7 @@ public class WarehouseEntity extends HopEntity {
         this.level = level;
     }
 
-    @OneToMany
-    @JoinColumn(name = "next_hops_id")
+    @OneToMany(mappedBy = "nextHops")
     public List<WarehouseNextHopsEntity> getNextHops() {
         return nextHops;
     }

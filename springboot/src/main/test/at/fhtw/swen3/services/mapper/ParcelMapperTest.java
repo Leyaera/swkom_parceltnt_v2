@@ -15,31 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ParcelMapperTest {
 
     @Test
-    void parcelEntityToNewParcelInfoDto() {
-        ParcelEntity p = new ParcelEntity(null, null, null, "testid",
-                null, null, null);
-
-        NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.parcelEntityToNewParcelInfoDto(p);
-        assertNotNull(newParcelInfo);
-        assertEquals("testid", newParcelInfo.getTrackingId());
-    }
-
-    @Test
-    void parcelEntityToTrackingInformationDto() {
-        ParcelEntity p = new ParcelEntity(null, null, null, "testid",
-                State.DELIVERED, Collections.emptyList(), Collections.emptyList());
-
-        TrackingInformation newTrackingInformation = ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(p);
-        assertNotNull(newTrackingInformation);
-        assertEquals(newTrackingInformation.getState().getValue(), TrackingInformation.StateEnum.DELIVERED.getValue());
-    }
-
-    @Test
     void parcelEntityToParcelDto() {
         ParcelEntity p = new ParcelEntity(12.0f, new RecipientEntity(), new RecipientEntity(), "testid",
                 State.DELIVERED, Collections.emptyList(), Collections.emptyList());
 
-        Parcel parcelDto = ParcelMapper.INSTANCE.parcelEntityToParcelDto(p);
+        Parcel parcelDto = ParcelMapper.INSTANCE.entityToDto(p);
         assertNotNull(parcelDto);
         assertEquals(p.getWeight(), parcelDto.getWeight());
     }
@@ -49,8 +29,8 @@ class ParcelMapperTest {
         Parcel parcelDto = new Parcel();
         parcelDto.weight(12.0f);
 
-        ParcelEntity p = ParcelMapper.INSTANCE.parcelDtoToParcelEntity(parcelDto);
+        ParcelEntity p = ParcelMapper.INSTANCE.dtoToEntity(parcelDto);
         assertNotNull(p);
-        assertEquals(p.getWeight(), p.getWeight());
+        assertEquals(parcelDto.getWeight(), p.getWeight());
     }
 }

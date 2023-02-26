@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface City {
-    String message() default "City does not match pattern.";
+    String message() default "In Austria: City name must match pattern.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

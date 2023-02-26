@@ -9,19 +9,18 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ParcelMapper {
+public interface ParcelMapper extends BasicMapper<ParcelEntity, Parcel>{
 
     ParcelMapper INSTANCE = Mappers.getMapper(ParcelMapper.class);
 
     @Mapping(source = "trackingId", target = "trackingId")
     NewParcelInfo parcelEntityToNewParcelInfoDto(ParcelEntity parcel);
 
-
     @Mapping(source = "state", target = "state")
     @Mapping(source = "visitedHops", target = "visitedHops")
     @Mapping(source = "futureHops", target = "futureHops")
     TrackingInformation parcelEntityToTrackingInformationDto(ParcelEntity parcel);
-
+/*
     @Mapping(source = "weight", target = "weight")
     @Mapping(source = "recipient", target = "recipient")
     @Mapping(source = "sender", target = "sender")
@@ -31,4 +30,6 @@ public interface ParcelMapper {
     @Mapping(source = "recipient", target = "recipient")
     @Mapping(source = "sender", target = "sender")
     ParcelEntity parcelDtoToParcelEntity(at.fhtw.swen3.services.dto.Parcel parcel);
+
+     */
 }

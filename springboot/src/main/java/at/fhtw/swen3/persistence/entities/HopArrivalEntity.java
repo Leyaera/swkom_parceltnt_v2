@@ -32,9 +32,11 @@ public class HopArrivalEntity {
     private OffsetDateTime dateTime;
 
     @ManyToOne
+    @JoinColumn(name = "fk_visited_hops")
     private ParcelEntity visitedHops;
 
     @ManyToOne
+    @JoinColumn(name = "fk_future_hops")
     private ParcelEntity futureHops;
 
     public Long getId() {
@@ -70,7 +72,7 @@ public class HopArrivalEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "visited_hops_id")
+    @JoinColumn(name = "fk_visited_hops")
     public ParcelEntity getVisitedHops() {
         return visitedHops;
     }
@@ -80,7 +82,7 @@ public class HopArrivalEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "future_hops_id")
+    @JoinColumn(name = "fk_future_hops")
     public ParcelEntity getFutureHops() {
         return futureHops;
     }

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Street {
-    String message() default "Street does not match pattern.";
+    String message() default "In Austria: Street name must match pattern.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

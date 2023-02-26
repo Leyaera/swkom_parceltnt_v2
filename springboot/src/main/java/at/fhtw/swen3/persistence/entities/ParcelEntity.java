@@ -25,12 +25,12 @@ public class ParcelEntity {
     private Float weight;
 
     @OneToOne
-    @JoinColumn(name = "recipient_id")
+    @JoinColumn(name = "fk_recipient")
     @NotNull(message = "Recipient can not be null!")
     private RecipientEntity recipient;
 
     @OneToOne
-    @JoinColumn(name = "sender_id")
+    @JoinColumn(name = "fk_sender")
     @NotNull(message = "Sender can not be null!")
     private RecipientEntity sender;
 
@@ -43,11 +43,11 @@ public class ParcelEntity {
     @NotNull(message = "State can not be null!")
     private State state;
 
-    @OneToMany
+    @OneToMany(mappedBy = "visitedHops")
     @NotNull
     private List<HopArrivalEntity> visitedHops;
 
-    @OneToMany
+    @OneToMany(mappedBy = "futureHops")
     @NotNull
     private List<HopArrivalEntity> futureHops;
 

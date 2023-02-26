@@ -15,6 +15,7 @@ public class CityValidator implements ConstraintValidator<City, RecipientEntity>
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
     public boolean isValid(RecipientEntity recipient, ConstraintValidatorContext constraintValidatorContext) {
+
         if("Österreich".equals(recipient.getCountry()) || "Austria".equals(recipient.getCountry())) {
             return CITY_PATTERN.matcher(recipient.getCity()).matches();
         } else {
