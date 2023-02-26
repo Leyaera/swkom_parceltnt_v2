@@ -1,10 +1,9 @@
-package at.fhtw.swen3.services.impl;
+package at.fhtw.swen3.controller.rest;
 
-import at.fhtw.swen3.controller.rest.ParcelApi;
+import at.fhtw.swen3.controller.rest.WarehouseApi;
 import at.fhtw.swen3.services.dto.Error;
-import at.fhtw.swen3.services.dto.NewParcelInfo;
-import at.fhtw.swen3.services.dto.Parcel;
-import at.fhtw.swen3.services.dto.TrackingInformation;
+import at.fhtw.swen3.services.dto.Hop;
+import at.fhtw.swen3.services.dto.Warehouse;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +32,12 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-02-18T16:02:14.309709Z[Etc/UTC]")
 @Controller
 @RequestMapping("${openapi.parcelLogisticsService.base-path:}")
-public class ParcelApiController implements ParcelApi {
+public class WarehouseApiController implements WarehouseApi {
 
     private final NativeWebRequest request;
 
     @Autowired
-    public ParcelApiController(NativeWebRequest request) {
+    public WarehouseApiController(NativeWebRequest request) {
         this.request = request;
     }
 
