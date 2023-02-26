@@ -16,7 +16,7 @@ class ParcelMapperTest {
 
     @Test
     void parcelEntityToNewParcelInfoDto() {
-        ParcelEntity p = new ParcelEntity("testid", null, null, null,
+        ParcelEntity p = new ParcelEntity(null, null, null, "testid",
                 null, null, null);
 
         NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.parcelEntityToNewParcelInfoDto(p);
@@ -26,7 +26,7 @@ class ParcelMapperTest {
 
     @Test
     void parcelEntityToTrackingInformationDto() {
-        ParcelEntity p = new ParcelEntity("testid", null, null, null,
+        ParcelEntity p = new ParcelEntity(null, null, null, "testid",
                 State.DELIVERED, Collections.emptyList(), Collections.emptyList());
 
         TrackingInformation newTrackingInformation = ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(p);
@@ -36,7 +36,7 @@ class ParcelMapperTest {
 
     @Test
     void parcelEntityToParcelDto() {
-        ParcelEntity p = new ParcelEntity("testid", 12.0f, new RecipientEntity(), new RecipientEntity(),
+        ParcelEntity p = new ParcelEntity(12.0f, new RecipientEntity(), new RecipientEntity(), "testid",
                 State.DELIVERED, Collections.emptyList(), Collections.emptyList());
 
         Parcel parcelDto = ParcelMapper.INSTANCE.parcelEntityToParcelDto(p);

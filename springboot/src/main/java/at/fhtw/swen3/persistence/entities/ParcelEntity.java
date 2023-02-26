@@ -22,7 +22,7 @@ public class ParcelEntity {
     private String trackingId;
 
     @DecimalMin(value = "1.0",message ="weight must be at least 1.0")
-    //@NotNull(message = "Weight can not be null!")
+    @NotNull(message = "Weight can not be null!")
     private Float weight;
 
     @OneToOne
@@ -33,7 +33,7 @@ public class ParcelEntity {
     @NotNull(message = "Sender can not be null!")
     private RecipientEntity sender;
 
-    //@NotNull(message = "State can not be null!")
+    @NotNull(message = "State can not be null!")
     private State state;
 
     @OneToMany
@@ -44,11 +44,11 @@ public class ParcelEntity {
     @NotNull
     private List<HopArrivalEntity> futureHops;
 
-    public ParcelEntity(String trackingId, Float weight, RecipientEntity recipient, RecipientEntity sender, State state, List<HopArrivalEntity> visitedHops, List<HopArrivalEntity> futureHops) {
-        this.trackingId = trackingId;
+    public ParcelEntity(Float weight, RecipientEntity recipient, RecipientEntity sender, String trackingId, State state, List<HopArrivalEntity> visitedHops, List<HopArrivalEntity> futureHops) {
         this.weight = weight;
         this.recipient = recipient;
         this.sender = sender;
+        this.trackingId = trackingId;
         this.state = state;
         this.visitedHops = visitedHops;
         this.futureHops = futureHops;

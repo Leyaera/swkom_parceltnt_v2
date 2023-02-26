@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CityValidatorTest {
-    private final CityValidator citiValidator = new CityValidator();
+    private final CityValidator cityValidator = new CityValidator();
 
     @Test
     @DisplayName("Other country than \"Austria\" or \"Österreich\" is always true.")
@@ -17,7 +17,7 @@ class CityValidatorTest {
         r.setCountry("Deutschland");
         r.setCity("Wien");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertTrue(result);
     }
 
@@ -28,7 +28,7 @@ class CityValidatorTest {
         r.setCountry("Austria");
         r.setCity("Wien");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertTrue(result);
     }
 
@@ -39,7 +39,7 @@ class CityValidatorTest {
         r.setCountry("Austria");
         r.setCity("Wi-en");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertTrue(result);
     }
 
@@ -50,7 +50,7 @@ class CityValidatorTest {
         r.setCountry("Austria");
         r.setCity("Wi en");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertTrue(result);
     }
 
@@ -61,7 +61,7 @@ class CityValidatorTest {
         r.setCountry("Austria");
         r.setCity("Wi/en");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertTrue(result);
     }
 
@@ -72,7 +72,7 @@ class CityValidatorTest {
         r.setCountry("Österreich");
         r.setCity("Wien");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertTrue(result);
     }
 
@@ -83,7 +83,7 @@ class CityValidatorTest {
         r.setCountry("Austria");
         r.setCity("W1en");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertFalse(result);
     }
 
@@ -94,7 +94,7 @@ class CityValidatorTest {
         r.setCountry("Österreich");
         r.setCity("W1en");
 
-        boolean result = citiValidator.isValid(r, null);
+        boolean result = cityValidator.isValid(r, null);
         assertFalse(result);
     }
 }
