@@ -2,6 +2,7 @@ package at.fhtw.swen3.persistence.entities;
 
 import javax.persistence.*;
 
+@Table
 @Entity
 public class WarehouseNextHopsEntity {
     @Id

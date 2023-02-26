@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
+@Table
 @Entity
 public class ParcelEntity {
     @Id
@@ -42,11 +43,11 @@ public class ParcelEntity {
     @NotNull(message = "State can not be null!")
     private State state;
 
-    @OneToMany(mappedBy = "visitedHops")
+    @OneToMany
     @NotNull
     private List<HopArrivalEntity> visitedHops;
 
-    @OneToMany(mappedBy = "futureHops")
+    @OneToMany
     @NotNull
     private List<HopArrivalEntity> futureHops;
 
@@ -103,6 +104,7 @@ public class ParcelEntity {
         this.state = state;
     }
 
+    @OneToMany(mappedBy = "visitedHops")
     public List<HopArrivalEntity> getVisitedHops() {
         return visitedHops;
     }
@@ -111,6 +113,7 @@ public class ParcelEntity {
         this.visitedHops = visitedHops;
     }
 
+    @OneToMany(mappedBy = "futureHops")
     public List<HopArrivalEntity> getFutureHops() {
         return futureHops;
     }

@@ -26,7 +26,7 @@ public class HopEntity {
     private String locationName;
 
     @OneToOne
-    @JoinColumn(name = "geoCoordinage_id")
+    //@JoinColumn(name = "fk_lo")
     private GeoCoordinateEntity locationCoordinates;
 
     @Id
@@ -76,6 +76,8 @@ public class HopEntity {
         this.locationName = locationName;
     }
 
+    @OneToOne
+    @JoinColumn(name = "geo_coordinates_id")
     public GeoCoordinateEntity getLocationCoordinates() {
         return locationCoordinates;
     }

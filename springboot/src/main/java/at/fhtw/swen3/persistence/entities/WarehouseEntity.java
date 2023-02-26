@@ -2,10 +2,8 @@ package at.fhtw.swen3.persistence.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 public class WarehouseEntity extends HopEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
@@ -15,7 +13,7 @@ public class WarehouseEntity extends HopEntity {
     @Column
     private Integer level;
 
-    @OneToMany(mappedBy = "nextHops")
+    @OneToMany
     @NotNull
     private List<WarehouseNextHopsEntity> nextHops;
 
