@@ -3,6 +3,7 @@ package at.fhtw.swen3.persistence.entities;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "error")
 public class ErrorEntity {
 
     @Id
@@ -19,5 +20,13 @@ public class ErrorEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

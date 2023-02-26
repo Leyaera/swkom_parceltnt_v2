@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@Table
 @Entity
+@Table(name = "parcel")
 public class ParcelEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")

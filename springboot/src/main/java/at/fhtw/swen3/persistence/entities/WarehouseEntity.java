@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Entity
 public class WarehouseEntity extends HopEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
@@ -34,6 +35,8 @@ public class WarehouseEntity extends HopEntity {
         this.level = level;
     }
 
+    @OneToMany
+    @JoinColumn(name = "next_hops_id")
     public List<WarehouseNextHopsEntity> getNextHops() {
         return nextHops;
     }

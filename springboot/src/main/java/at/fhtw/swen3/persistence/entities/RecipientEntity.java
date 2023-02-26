@@ -15,6 +15,7 @@ import javax.validation.constraints.Pattern;
 @Street
 @Name
 @Entity
+@Table(name = "recipient")
 public class RecipientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")

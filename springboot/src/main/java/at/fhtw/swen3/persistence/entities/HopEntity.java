@@ -3,6 +3,7 @@ package at.fhtw.swen3.persistence.entities;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "hop")
 public class HopEntity {
 
     @Id

@@ -2,8 +2,8 @@ package at.fhtw.swen3.persistence.entities;
 
 import javax.persistence.*;
 
-@Table
 @Entity
+@Table(name = "warehouse_next_hops")
 public class WarehouseNextHopsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")

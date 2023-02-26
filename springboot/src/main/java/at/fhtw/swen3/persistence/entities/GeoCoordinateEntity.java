@@ -3,6 +3,7 @@ package at.fhtw.swen3.persistence.entities;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "geo_coordinate")
 public class GeoCoordinateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")

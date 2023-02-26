@@ -7,6 +7,7 @@ import javax.validation.constraints.Pattern;
 import java.time.OffsetDateTime;
 
 @Entity
+@Table(name = "hop_arrival_entity")
 public class HopArrivalEntity {
     //^[A-Z]{4}\\d{1,4}$ - https://stackoverflow.com/questions/14017134/what-is-d-d-in-regex
 
@@ -29,6 +30,12 @@ public class HopArrivalEntity {
     //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     //@NotNull(message = "Date/Time can not be null!")
     private OffsetDateTime dateTime;
+
+    @ManyToOne
+    private ParcelEntity visitedHops;
+
+    @ManyToOne
+    private ParcelEntity futureHops;
 
     public Long getId() {
         return id;
@@ -60,5 +67,25 @@ public class HopArrivalEntity {
 
     public void setDateTime(OffsetDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "visited_hops_id")
+    public ParcelEntity getVisitedHops() {
+        return visitedHops;
+    }
+
+    public void setVisitedHops(ParcelEntity visitedHops) {
+        this.visitedHops = visitedHops;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "future_hops_id")
+    public ParcelEntity getFutureHops() {
+        return futureHops;
+    }
+
+    public void setFutureHops(ParcelEntity futureHops) {
+        this.futureHops = futureHops;
     }
 }
