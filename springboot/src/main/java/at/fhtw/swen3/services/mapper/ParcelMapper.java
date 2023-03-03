@@ -20,16 +20,4 @@ public interface ParcelMapper extends BasicMapper<ParcelEntity, Parcel>{
     @Mapping(source = "visitedHops", target = "visitedHops")
     @Mapping(source = "futureHops", target = "futureHops")
     TrackingInformation parcelEntityToTrackingInformationDto(ParcelEntity parcel);
-/*
-    @Mapping(source = "weight", target = "weight")
-    @Mapping(source = "recipient", target = "recipient")
-    @Mapping(source = "sender", target = "sender")
-    Parcel parcelEntityToParcelDto(ParcelEntity parcel);
-
-    @Mapping(source = "weight", target = "weight")
-    @Mapping(source = "recipient", target = "recipient")
-    @Mapping(source = "sender", target = "sender")
-    ParcelEntity parcelDtoToParcelEntity(at.fhtw.swen3.services.dto.Parcel parcel);
-
-     */
 }

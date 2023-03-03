@@ -1,9 +1,14 @@
 package at.fhtw.swen3.persistence.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class WarehouseEntity extends HopEntity {
     @Id
@@ -17,30 +22,4 @@ public class WarehouseEntity extends HopEntity {
     @OneToMany
     @NotNull
     private List<WarehouseNextHopsEntity> nextHops;
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    @OneToMany(mappedBy = "nextHops")
-    public List<WarehouseNextHopsEntity> getNextHops() {
-        return nextHops;
-    }
-
-    public void setNextHops(List<WarehouseNextHopsEntity> nextHops) {
-        this.nextHops = nextHops;
-    }
 }

@@ -1,11 +1,18 @@
 package at.fhtw.swen3.persistence.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "parcel")
 public class ParcelEntity {
@@ -31,7 +38,7 @@ public class ParcelEntity {
 
     @Column
     @Pattern(regexp = "^[A-Z0-9]{9}$", message = "tracking id has a length of 9 must only be upper letters and numbers.")
-    //@NotNull(message = "Tracking-ID can not be null!")
+    @NotNull(message = "Tracking-ID can not be null!")
     private String trackingId;
 
     @Column
@@ -53,67 +60,6 @@ public class ParcelEntity {
         this.trackingId = trackingId;
         this.state = state;
         this.visitedHops = visitedHops;
-        this.futureHops = futureHops;
-    }
-
-    public ParcelEntity() {
-    }
-
-    public Float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Float weight) {
-        this.weight = weight;
-    }
-
-    public RecipientEntity getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(RecipientEntity recipient) {
-        this.recipient = recipient;
-    }
-
-    public RecipientEntity getSender() {
-        return sender;
-    }
-
-    public void setSender(RecipientEntity sender) {
-        this.sender = sender;
-    }
-
-    public String getTrackingId() {
-        return trackingId;
-    }
-
-    public void setTrackingId(String trackingId) {
-        this.trackingId = trackingId;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    @OneToMany(mappedBy = "visitedHops")
-    public List<HopArrivalEntity> getVisitedHops() {
-        return visitedHops;
-    }
-
-    public void setVisitedHops(List<HopArrivalEntity> visitedHops) {
-        this.visitedHops = visitedHops;
-    }
-
-    @OneToMany(mappedBy = "futureHops")
-    public List<HopArrivalEntity> getFutureHops() {
-        return futureHops;
-    }
-
-    public void setFutureHops(List<HopArrivalEntity> futureHops) {
         this.futureHops = futureHops;
     }
 }

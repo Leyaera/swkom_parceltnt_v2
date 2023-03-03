@@ -1,32 +1,16 @@
 package at.fhtw.swen3.controller.rest;
 
-import at.fhtw.swen3.controller.rest.ParcelApi;
-import at.fhtw.swen3.services.dto.Error;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
-import at.fhtw.swen3.services.dto.TrackingInformation;
-
+import at.fhtw.swen3.services.impl.ParcelService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.validation.constraints.*;
-import javax.validation.Valid;
-
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
@@ -36,15 +20,28 @@ import javax.annotation.Generated;
 public class ParcelApiController implements ParcelApi {
 
     private final NativeWebRequest request;
+    private final ParcelService parcelService;
+
 
     @Autowired
-    public ParcelApiController(NativeWebRequest request) {
+    public ParcelApiController(NativeWebRequest request, ParcelService parcelService) {
         this.request = request;
+        this.parcelService = parcelService;
+    }
+
+    @Override
+    public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
+        NewParcelInfo newParcelInfo = parcelService.submitParcel(parcel);
+        if(newParcelInfo != null) {
+            return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.BAD_REQUEST);
     }
 
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return Optional.ofNullable(request);
     }
+
 
 }

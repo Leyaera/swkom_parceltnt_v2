@@ -7,7 +7,6 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class CityValidator implements ConstraintValidator<City, RecipientEntity> {
-
     private static final Pattern CITY_PATTERN = Pattern.compile("^[A-Z][ a-zA-Z-/]*");
 
     @Override

@@ -1,11 +1,20 @@
 package at.fhtw.swen3.persistence.entities;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import java.time.OffsetDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "hop_arrival_entity")
 public class HopArrivalEntity {
@@ -18,17 +27,17 @@ public class HopArrivalEntity {
 
     @Column
     @Pattern(regexp = "^[A-Z]{4}[0-9]{1,4}$")
-    //@NotNull(message = "Code can not be null!")
+    @NotNull(message = "Code can not be null!")
     private String code;
 
     @Column
     @Pattern(regexp = "[A-Z ][a-zA-Z0-9 \\/\\-]*")
-    //@NotNull(message = "Description can not be null!")
+    @NotNull(message = "Description can not be null!")
     private String description;
 
     @Column
-    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    //@NotNull(message = "Date/Time can not be null!")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @NotNull(message = "Date/Time can not be null!")
     private OffsetDateTime dateTime;
 
     @ManyToOne
@@ -39,55 +48,9 @@ public class HopArrivalEntity {
     @JoinColumn(name = "fk_future_hops")
     private ParcelEntity futureHops;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
+    public HopArrivalEntity(String code, String description, OffsetDateTime dateTime) {
         this.code = code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public OffsetDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(OffsetDateTime dateTime) {
         this.dateTime = dateTime;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "fk_visited_hops")
-    public ParcelEntity getVisitedHops() {
-        return visitedHops;
-    }
-
-    public void setVisitedHops(ParcelEntity visitedHops) {
-        this.visitedHops = visitedHops;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "fk_future_hops")
-    public ParcelEntity getFutureHops() {
-        return futureHops;
-    }
-
-    public void setFutureHops(ParcelEntity futureHops) {
-        this.futureHops = futureHops;
     }
 }
