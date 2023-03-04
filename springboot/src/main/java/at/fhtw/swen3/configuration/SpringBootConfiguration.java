@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringBootConfiguration {
     @Bean
-    public ParcelServiceImpl parcelService(ParcelRepository parcelRepository, BLValidator blValidator, RecipientRepository recipientRepository) {
+    public ParcelServiceImpl parcelService(BLValidator blValidator, ParcelRepository parcelRepository, RecipientRepository recipientRepository) {
         return new ParcelServiceImpl(blValidator, parcelRepository, recipientRepository);
     }
 }
