@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "recipient")
 public class RecipientEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @Column
     private Long id;
 

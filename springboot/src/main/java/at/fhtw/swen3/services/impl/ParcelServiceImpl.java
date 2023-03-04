@@ -68,7 +68,7 @@ public class ParcelServiceImpl implements ParcelService {
         // get random tracking ID
         String trackingId = randomAlphanumericTrackingId();
 
-        // create parcelEntity and recipientEntity
+        // create parcelEntity
         parcelEntity.setTrackingId(trackingId);
         parcelEntity.setState(State.PICKUP);
         parcelEntity.setRecipient(recipientEntity);
