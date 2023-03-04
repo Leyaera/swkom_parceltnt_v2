@@ -1,9 +1,11 @@
 package at.fhtw.swen3.controller.rest;
 
+import at.fhtw.swen3.persistence.entities.State;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
-import at.fhtw.swen3.services.impl.ParcelService;
+import at.fhtw.swen3.services.dto.HopArrival;
 
+import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 import at.fhtw.swen3.services.impl.RecipientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Optional;
 import javax.annotation.Generated;
+import javax.sound.midi.Track;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-02-18T16:02:14.309709Z[Etc/UTC]")
 @Controller
@@ -40,6 +43,17 @@ public class ParcelApiController implements ParcelApi {
             return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
         }
         return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<TrackingInformation> trackParcel(String trackingId) {
+        TrackingInformation trackingInformation = parcelServiceImpl.trackParcel(trackingId);
+        if(trackingInformation != null) {
+            return new ResponseEntity<TrackingInformation>(trackingInformation, HttpStatus.CREATED);
+        }
+        trackingInformation = new TrackingInformation();
+        trackingInformation.setState(TrackingInformation.StateEnum.PICKUP);
+        return new ResponseEntity<TrackingInformation>(trackingInformation, HttpStatus.NOT_FOUND);
     }
 
     @Override

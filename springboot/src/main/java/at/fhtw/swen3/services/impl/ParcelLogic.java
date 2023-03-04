@@ -8,6 +8,7 @@ import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
+import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.BLValidator;
@@ -57,4 +58,12 @@ public class ParcelLogic {
         }
     }
 
+    public TrackingInformation findParcelByTrackingId(String trackingId) {
+        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
+        if (parcelEntity != null) {
+            return ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(parcelEntity);
+        } else {
+            return null;
+        }
+    }
 }

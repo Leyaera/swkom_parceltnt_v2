@@ -11,9 +11,10 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
-    /*
+
     ParcelEntity findByTrackingId(String trackingId);
 
+    /*
     @Transactional
     @Modifying
     @Query(value = "UPDATE parcel_entity  SET state = 4 WHERE tracking_id = :trackingid",nativeQuery = true)
