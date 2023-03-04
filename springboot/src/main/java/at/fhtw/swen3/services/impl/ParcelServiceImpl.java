@@ -23,19 +23,11 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-// @Validated
-//@RequiredArgsConstructor
-//@NoArgsConstructor
-public class ParcelServiceImpl implements ParcelService {
-    private final BLValidator blValidatior;
-    private final ParcelRepository parcelRepository;
-    private final RecipientRepository recipientRepository;
-
+//@Validated
+public class ParcelServiceImpl extends ParcelService {
     @Autowired
-    public ParcelServiceImpl(BLValidator blValidator, ParcelRepository parcelRepository, RecipientRepository recipientRepository) {
-        this.blValidatior = blValidator;
-        this.parcelRepository = parcelRepository;
-        this.recipientRepository = recipientRepository;
+    public ParcelServiceImpl(ParcelLogic parcelLogic) {
+        super(parcelLogic);
     }
 
     public String randomAlphanumericTrackingId() {
@@ -57,36 +49,11 @@ public class ParcelServiceImpl implements ParcelService {
         return generatedString;
     }
 
-    @Override
     public NewParcelInfo submitParcel(Parcel parcel) {
-
-        // DTOs to Entity
-        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.dtoToEntity(parcel);
-        RecipientEntity recipientEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getRecipient());
-        RecipientEntity senderEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getSender());
 
         // get random tracking ID
         String trackingId = randomAlphanumericTrackingId();
-
-        // create parcelEntity
-        parcelEntity.setTrackingId(trackingId);
-        parcelEntity.setState(State.PICKUP);
-        parcelEntity.setRecipient(recipientEntity);
-        parcelEntity.setSender(senderEntity);
-        // TODO: generate visitedHops and futureHops
-        parcelEntity.setFutureHops(new ArrayList<HopArrivalEntity>());
-        parcelEntity.setVisitedHops(new ArrayList<HopArrivalEntity>());
-
-        if (blValidatior.validate(parcelEntity)) {
-            // Save to DB
-            recipientRepository.save(recipientEntity);
-            recipientRepository.save(senderEntity);
-            parcelRepository.save(parcelEntity);
-
-            NewParcelInfo newParcelInfo = new NewParcelInfo();
-            newParcelInfo.setTrackingId(parcelEntity.getTrackingId());
-            return newParcelInfo;
-        }
-        return null;
+        parcelLogic.setTrackingId(trackingId);
+        return parcelLogic.saveNewParcel(parcel);
     }
 }

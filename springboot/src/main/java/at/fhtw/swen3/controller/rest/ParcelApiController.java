@@ -4,6 +4,8 @@ import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.impl.ParcelService;
 
+import at.fhtw.swen3.services.impl.ParcelServiceImpl;
+import at.fhtw.swen3.services.impl.RecipientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +22,20 @@ import javax.annotation.Generated;
 public class ParcelApiController implements ParcelApi {
 
     private final NativeWebRequest request;
-    private final ParcelService parcelService;
+    private final ParcelServiceImpl parcelServiceImpl;
+    private final RecipientServiceImpl recipientServiceImpl;
 
 
     @Autowired
-    public ParcelApiController(NativeWebRequest request, ParcelService parcelService) {
+    public ParcelApiController(NativeWebRequest request, ParcelServiceImpl parcelServiceImpl, RecipientServiceImpl recipientServiceImpl) {
         this.request = request;
-        this.parcelService = parcelService;
+        this.parcelServiceImpl = parcelServiceImpl;
+        this.recipientServiceImpl = recipientServiceImpl;
     }
 
     @Override
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
-        NewParcelInfo newParcelInfo = parcelService.submitParcel(parcel);
+        NewParcelInfo newParcelInfo = parcelServiceImpl.submitParcel(parcel);
         if(newParcelInfo != null) {
             return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
         }

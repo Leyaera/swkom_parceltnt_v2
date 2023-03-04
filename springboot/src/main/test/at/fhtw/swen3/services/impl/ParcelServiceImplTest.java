@@ -17,32 +17,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ParcelServiceImplTest {
     private ParcelServiceImpl parcelServiceImpl;
-    private BLValidator blValidator;
-    private Recipient recipient;
-    private Recipient sender;
     private Parcel parcel;
-
     @Mock
     private ParcelRepository mockedParcelRepository;
-
     @Mock
     private RecipientRepository mockedRecipientRepository;
 
     @BeforeEach
     public void init() {
-        blValidator = new BLValidator();
 
         MockitoAnnotations.initMocks(this);
-        parcelServiceImpl = new ParcelServiceImpl(blValidator, mockedParcelRepository, mockedRecipientRepository);
+        RecipientLogic recipientLogic = new RecipientLogic(mockedRecipientRepository);
+        ParcelLogic parcelLogic = new ParcelLogic(mockedParcelRepository, recipientLogic);
+        parcelServiceImpl = new ParcelServiceImpl(parcelLogic);
 
-        recipient = new Recipient();
+        Recipient recipient = new Recipient();
         recipient.setName("Max Mustermann");
         recipient.setStreet("Landstraße 27a");
         recipient.setPostalCode("A-1110");
         recipient.setCity("Wien");
         recipient.setCountry("Austria");
 
-        sender = new Recipient();
+        Recipient sender = new Recipient();
         sender.setName("Maria Musterfrau");
         sender.setStreet("Musterfraustraße 100b");
         sender.setPostalCode("38193");

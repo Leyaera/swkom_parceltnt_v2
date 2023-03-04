@@ -1,8 +1,9 @@
 package at.fhtw.swen3.services.impl;
 
-import at.fhtw.swen3.services.dto.NewParcelInfo;
-import at.fhtw.swen3.services.dto.Parcel;
+import lombok.RequiredArgsConstructor;
 
-public interface ParcelService {
-    NewParcelInfo submitParcel(Parcel parcel);
+@RequiredArgsConstructor
+public class ParcelService {
+    protected final ParcelLogic parcelLogic;
+
 }
