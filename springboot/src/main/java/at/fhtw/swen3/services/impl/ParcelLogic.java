@@ -21,13 +21,11 @@ import java.util.ArrayList;
 @Component
 public class ParcelLogic {
     private final ParcelRepository parcelRepository;
-    private final RecipientLogic recipientLogic;
     private String trackingId = "";
 
     @Autowired
-    public ParcelLogic(ParcelRepository parcelRepository, RecipientLogic recipientLogic) {
+    public ParcelLogic(ParcelRepository parcelRepository) {
         this.parcelRepository = parcelRepository;
-        this.recipientLogic = recipientLogic;
     }
 
     public void setTrackingId(String trackingId) {
@@ -36,12 +34,14 @@ public class ParcelLogic {
 
     public NewParcelInfo saveNewParcel(Parcel parcel) {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.dtoToEntity(parcel);
+        RecipientEntity recipientEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getRecipient());
+        RecipientEntity senderEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getSender());
 
         // create parcelEntity
         parcelEntity.setTrackingId(trackingId);
         parcelEntity.setState(State.PICKUP);
-        parcelEntity.setRecipient(recipientLogic.saveNewRecipient(parcel.getRecipient()));
-        parcelEntity.setSender(recipientLogic.saveNewRecipient(parcel.getSender()));
+        parcelEntity.setRecipient(recipientEntity);
+        parcelEntity.setSender(senderEntity);
         // TODO: generate visitedHops and futureHops
         parcelEntity.setFutureHops(new ArrayList<HopArrivalEntity>());
         parcelEntity.setVisitedHops(new ArrayList<HopArrivalEntity>());

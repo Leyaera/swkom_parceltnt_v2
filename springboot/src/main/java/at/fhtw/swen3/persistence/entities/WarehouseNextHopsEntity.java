@@ -18,11 +18,13 @@ public class WarehouseNextHopsEntity {
     @Column
     private Integer traveltimeMins;
 
-    @OneToOne
-    @JoinColumn(name = "hop_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_to_hop")
     private HopEntity hop;
 
+    /*
     @ManyToOne
-    @JoinColumn(name = "fk_next_hops")
-    private WarehouseEntity nextHops;
+    private WarehouseEntity fromHop;
+
+     */
 }

@@ -5,13 +5,11 @@ import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.Recipient;
-import at.fhtw.swen3.services.validation.BLValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,15 +18,12 @@ class ParcelServiceImplTest {
     private Parcel parcel;
     @Mock
     private ParcelRepository mockedParcelRepository;
-    @Mock
-    private RecipientRepository mockedRecipientRepository;
 
     @BeforeEach
     public void init() {
 
         MockitoAnnotations.initMocks(this);
-        RecipientLogic recipientLogic = new RecipientLogic(mockedRecipientRepository);
-        ParcelLogic parcelLogic = new ParcelLogic(mockedParcelRepository, recipientLogic);
+        ParcelLogic parcelLogic = new ParcelLogic(mockedParcelRepository);
         parcelServiceImpl = new ParcelServiceImpl(parcelLogic);
 
         Recipient recipient = new Recipient();

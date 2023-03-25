@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "hop_arrival_entity")
+@Table(name = "hop_arrival")
 public class HopArrivalEntity {
     //^[A-Z]{4}\\d{1,4}$ - https://stackoverflow.com/questions/14017134/what-is-d-d-in-regex
 

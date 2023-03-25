@@ -19,7 +19,8 @@ public class WarehouseEntity extends HopEntity {
     @Column
     private Integer level;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_from_hop")
     @NotNull
     private List<WarehouseNextHopsEntity> nextHops;
 }

@@ -31,7 +31,7 @@ public class HopEntity {
     @Column
     private String locationName;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_location_coordinates")
     private GeoCoordinateEntity locationCoordinates;
 }

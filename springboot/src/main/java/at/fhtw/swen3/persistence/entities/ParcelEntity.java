@@ -26,12 +26,12 @@ public class ParcelEntity {
     @NotNull(message = "Weight can not be null!")
     private Float weight;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_recipient")
     @NotNull(message = "Recipient can not be null!")
     private RecipientEntity recipient;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_sender")
     @NotNull(message = "Sender can not be null!")
     private RecipientEntity sender;
