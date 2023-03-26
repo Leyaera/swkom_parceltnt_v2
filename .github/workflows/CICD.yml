@@ -58,7 +58,7 @@
             aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
             use_existing_version_if_available: true
             application_name: swkom_parceltnt_v2_kratzer
-            environment_name: Swkomparceltntv2kratzer-env
+            environment_name: Swkomparceltntv2kratzer-env-1
             version_label: ${{github.SHA}}
             region: us-east-1
             deployment_package: openapi-spring-1.22.1.jar
