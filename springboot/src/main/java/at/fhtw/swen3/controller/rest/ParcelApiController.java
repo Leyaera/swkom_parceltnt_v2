@@ -27,7 +27,6 @@ public class ParcelApiController implements ParcelApi {
     private final NativeWebRequest request;
     private final ParcelServiceImpl parcelServiceImpl;
 
-
     @Autowired
     public ParcelApiController(NativeWebRequest request, ParcelServiceImpl parcelServiceImpl) {
         this.request = request;
@@ -36,6 +35,11 @@ public class ParcelApiController implements ParcelApi {
 
     @Override
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
+        try {
+
+        } catch (Exception e) {
+            log.error("Request failed due to an error: {}", e.getMessage());
+        }
         NewParcelInfo newParcelInfo = parcelServiceImpl.submitParcel(parcel);
         if(newParcelInfo != null) {
             log.info("Successfully submitted new parcel.");
