@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
     @Bean
     public ParcelService parcelService(ParcelLogic parcelLogic) {
-        return new ParcelService(parcelLogic);
+        return new ParcelServiceImpl(parcelLogic);
     }
 
     @Bean
-    public WarehouseService warehouseService(WarehouseLogic warehouseLogic) { return new WarehouseService(warehouseLogic); }
+    public WarehouseService warehouseService(WarehouseLogic warehouseLogic) { return new WarehouseServiceImpl(warehouseLogic); }
 }

@@ -4,6 +4,7 @@ import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.persistence.entities.State;
+import at.fhtw.swen3.services.exception.BLValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,33 +48,44 @@ class BLValidatorTest {
     @DisplayName("Testing CityValidator in BLValidatorFactory with wrong city name in Austria (\"W1en\".")
     public void cityValidatorTestInValidatorFactoryInvalid() {
         r.setCity("W1en");
-        assertFalse(blValidator.validate(r));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(r);
+        });
     }
 
     @Test
-    @DisplayName("HopArrivalC code fits correct pattern \"ABCD1234\".")
+    @DisplayName("HopArrival code fits correct pattern \"ABCD1234\".")
     public void hopArrivalCodeIsValid() {
-        assertTrue(blValidator.validate(h));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(h);
+        });
+
     }
 
     @Test
     @DisplayName("HopArrival code does not fit correct pattern \"ABCD12E4\".")
     public void hopArrivalCodeIsInValid() {
         h.setCode("ABCD12E4");
-        assertFalse(blValidator.validate(h));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(h);
+        });
     }
 
     @Test
     @DisplayName("HopArrival/Warehouse description fits correct pattern \"Warehouse 27-12\".")
     public void hopArrivalDescriptionIsValid() {
-        assertTrue(blValidator.validate(h));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(h);
+        });
     }
 
     @Test
     @DisplayName("HopArrival/Warehouse description does not fit correct pattern \"Warehouse 27+12\".")
     public void hopArrivalDescriptionIsInValid() {
         h.setDescription("Warehouse 27+12");
-        assertFalse(blValidator.validate(h));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(h);
+        });
     }
 
     @Test
@@ -87,7 +99,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -101,7 +115,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -115,7 +131,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -129,7 +147,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -143,7 +163,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -157,7 +179,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -171,7 +195,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -185,7 +211,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -199,7 +227,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -213,7 +243,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -227,7 +259,9 @@ class BLValidatorTest {
                 null,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -241,7 +275,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -255,7 +291,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 null,
                 new ArrayList<>());
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -269,7 +307,9 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 new ArrayList<>());
-        assertTrue(blValidator.validate(p));
+        assertDoesNotThrow(() -> {
+            blValidator.validate(p);
+        });
     }
 
     @Test
@@ -283,6 +323,8 @@ class BLValidatorTest {
                 State.DELIVERED,
                 new ArrayList<>(),
                 null);
-        assertFalse(blValidator.validate(p));
+        assertThrows(BLValidationException.class, () -> {
+            blValidator.validate(p);
+        });
     }
 }

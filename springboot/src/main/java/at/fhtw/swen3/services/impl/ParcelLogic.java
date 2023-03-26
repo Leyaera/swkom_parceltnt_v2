@@ -9,61 +9,106 @@ import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.TrackingInformation;
+import at.fhtw.swen3.services.exception.BLDataNotFoundException;
+import at.fhtw.swen3.services.exception.BLValidationException;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.BLValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+@Slf4j
 @Component
 public class ParcelLogic {
     private final ParcelRepository parcelRepository;
-    private String trackingId = "";
 
     @Autowired
     public ParcelLogic(ParcelRepository parcelRepository) {
         this.parcelRepository = parcelRepository;
     }
 
-    public void setTrackingId(String trackingId) {
-        this.trackingId = trackingId;
+    public String randomAlphanumericTrackingId() {
+        log.info("In ParcelLogic.randomAlphanumericTrackingId():");
+        // generate alphanumeric tracking id that matches the given pattern "^[A-Z0-9]{9}$"
+        // https://www.baeldung.com/java-random-string
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 9;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                //.toString()
+                .substring(0, 9)
+                .toUpperCase();
+
+        if (!generatedString.matches("^[A-Z0-9]{9}$")) {
+            throw new IllegalArgumentException("The generated trackingId does not match the pattern \"^[A-Z0-9]{9}$\"");
+        }
+
+        log.info("    Generated new random alphanumeric tracking id: {}", generatedString);
+        return generatedString;
     }
 
-    public NewParcelInfo saveNewParcel(Parcel parcel) {
+    public NewParcelInfo saveNewParcel(Parcel parcel) throws BLValidationException {
+        log.info("In ParcelLogic.saveNewParcel():");
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.dtoToEntity(parcel);
+        log.info("    Parcel mapped to ParcelEntity.");
         RecipientEntity recipientEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getRecipient());
+        log.info("    (recipient) Recipient mapped to RecipientEntity.");
         RecipientEntity senderEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getSender());
+        log.info("    (sender) Recipient mapped to RecipientEntity.");
 
         // create parcelEntity
+        String trackingId = randomAlphanumericTrackingId();
         parcelEntity.setTrackingId(trackingId);
+        log.info("    Tracking id set to {}.", parcelEntity.getTrackingId());
         parcelEntity.setState(State.PICKUP);
+        log.info("    State set to {}.", parcelEntity.getState().toString());
         parcelEntity.setRecipient(recipientEntity);
+        log.info("    Recipient set to {}.", parcelEntity.getRecipient());
         parcelEntity.setSender(senderEntity);
-        // TODO: generate visitedHops and futureHops
+        log.info("    Sender set to {}.", parcelEntity.getSender());
+
+        // TODO: generate visitedHops and futureHops between sender and recipient via GeoEncodingService()
         parcelEntity.setFutureHops(new ArrayList<HopArrivalEntity>());
         parcelEntity.setVisitedHops(new ArrayList<HopArrivalEntity>());
 
-        if (BLValidator.INSTANCE.validate(parcelEntity)) {
-            // Save to DB
-            parcelRepository.save(parcelEntity);
-
-            NewParcelInfo newParcelInfo = new NewParcelInfo();
-            newParcelInfo.setTrackingId(trackingId);
-            return newParcelInfo;
-        } else {
-            return null;
+        try {
+            BLValidator.INSTANCE.validate(parcelEntity);
+            log.info("    ParcelEntity is validated.");
+        } catch (BLValidationException e) {
+            log.error("    BLValidation failed due to an error: {}", e.getMessage());
+            throw new BLValidationException(e, "Validation of ParcelEntity failed.");
         }
+
+        // Save to DB
+        parcelRepository.save(parcelEntity);
+        log.info("    parcelEntity hase been saved in database");
+        NewParcelInfo newParcelInfo = new NewParcelInfo();
+        newParcelInfo.setTrackingId(trackingId);
+        return newParcelInfo;
     }
 
-    public TrackingInformation findParcelByTrackingId(String trackingId) {
+    public TrackingInformation findParcelByTrackingId(String trackingId) throws BLDataNotFoundException {
+        log.info("In ParcelLogic.findParcelByTrackingId():");
         ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
         if (parcelEntity != null) {
-            return ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(parcelEntity);
+            log.info("    Parcel found with tracking id {}.", trackingId);
+            TrackingInformation trackingInformation = ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(parcelEntity);
+            log.info("    ParcelEntity mapped to TrackingInformationDto.");
+            log.info("    Parcel state: {}", trackingInformation.toString());
+            return trackingInformation;
         } else {
-            return null;
+            log.error("Parceldoes not exist with tracking id: {}", trackingId);
+            throw new BLDataNotFoundException(null, "Parcel does not exist with tracking id: " + trackingId);
         }
     }
 }

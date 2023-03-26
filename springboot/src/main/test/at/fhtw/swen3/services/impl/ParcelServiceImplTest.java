@@ -5,6 +5,7 @@ import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.Recipient;
+import at.fhtw.swen3.services.exception.BLValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,14 +52,14 @@ class ParcelServiceImplTest {
     void randomAlphanumericTrackingId() {
         int testCount = 10;
         for (int i = 0; i < testCount; i++)  {
-            String generatedString = parcelServiceImpl.randomAlphanumericTrackingId();
+            String generatedString = parcelServiceImpl.parcelLogic.randomAlphanumericTrackingId();
             assertTrue(generatedString.matches("^[A-Z0-9]{9}$"));
         }
     }
 
     @Test
     @DisplayName("SubmitParcel returns NewParcel Info (not null) and valid trackingId.")
-    public void submitParcel() {
+    public void submitParcel() throws BLValidationException {
         NewParcelInfo newParcelInfo = parcelServiceImpl.submitParcel(parcel);
         assertNotNull(newParcelInfo);
         assertTrue(newParcelInfo.getTrackingId().matches("^[A-Z0-9]{9}$"));

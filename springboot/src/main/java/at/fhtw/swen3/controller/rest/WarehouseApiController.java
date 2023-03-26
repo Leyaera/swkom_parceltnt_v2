@@ -8,6 +8,7 @@ import at.fhtw.swen3.services.dto.Warehouse;
 
 
 import at.fhtw.swen3.services.impl.WarehouseServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
+@Slf4j
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2023-02-18T16:02:14.309709Z[Etc/UTC]")
 @Controller
 @RequestMapping("${openapi.parcelLogisticsService.base-path:}")
@@ -47,10 +49,13 @@ public class WarehouseApiController implements WarehouseApi {
 
     @Override
     public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
-        if (warehouseService.importWarehouses(warehouse)) {
+        try {
+            warehouseService.importWarehouses(warehouse);
             return new ResponseEntity<Void>( HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error during importing warehouses: {}", e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     }
 
     @Override

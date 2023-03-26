@@ -4,14 +4,17 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
 import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.dto.Warehouse;
+import at.fhtw.swen3.services.exception.BLValidationException;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import at.fhtw.swen3.services.validation.BLValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+@Slf4j
 @Component
 public class WarehouseLogic {
     private final WarehouseRepository warehouseRepository;
@@ -24,17 +27,20 @@ public class WarehouseLogic {
         this.warehouseRepository = warehouseRepository;
     }
 
-    public boolean importWarehouses(Warehouse warehouse) {
+    public void importWarehouses(Warehouse warehouse) {
         WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
 
-        if (BLValidator.INSTANCE.validate(warehouseEntity)) {
-            //clear the existing DB
-            warehouseRepository.deleteAll();
-
-            //save to the DB
-            warehouseRepository.save(warehouseEntity);
-            return true;
+        try {
+            BLValidator.INSTANCE.validate(warehouseEntity);
+            log.info("    WarehouseEntity is validated.");
+        } catch (BLValidationException e) {
+            log.error("    BLValidation failed due to an error: {}", e.getMessage());
         }
-        return false;
+
+        //clear the existing DB
+        warehouseRepository.deleteAll();
+
+        //save to the DB
+        warehouseRepository.save(warehouseEntity);
     }
 }
