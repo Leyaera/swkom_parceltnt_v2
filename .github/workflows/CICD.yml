@@ -57,7 +57,7 @@
             aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
             use_existing_version_if_available: true
-            application_name: swkom_parceltnt_v2_kratzer
+            application_name: swkom_parceltntv2_kratzer
             environment_name: Swkomparceltntv2kratzer-env-1
             version_label: ${{github.SHA}}
             region: us-east-1
