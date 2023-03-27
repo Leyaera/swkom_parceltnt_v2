@@ -38,6 +38,23 @@ public class ParcelApiController implements ParcelApi {
     }
 
     @Override
+    public ResponseEntity<Void> reportParcelDelivery(String trackingId) {
+        try {
+            try {
+                parcelService.reportParcelDelivery(trackingId);
+                log.info("Successfully reported hop.");
+                return new ResponseEntity<Void>(HttpStatus.OK);
+            } catch (BLException e) {
+                log.error("The parcel with tracking ID {} was not found: {}", trackingId, e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            log.error("The operation failed due to an error: {}", e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
         try {
             try {

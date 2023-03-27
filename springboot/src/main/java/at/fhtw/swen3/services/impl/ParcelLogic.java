@@ -33,6 +33,62 @@ public class ParcelLogic {
         this.parcelRepository = parcelRepository;
     }
 
+    public void reportParcelDelivery(String trackingId) throws BLException{
+        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
+        if (parcelEntity == null) {
+            log.error("Parcel does not exist with this tracking ID {}", trackingId);
+            throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID: " + trackingId);
+        }
+        log.info("Parcel state:" + parcelEntity.getState());
+
+        parcelEntity.setState(State.DELIVERED);
+        log.info("Parcel state after change:" + parcelEntity.getState());
+
+        try {
+            parcelRepository.setStateToDelivered(trackingId);
+            log.info("Parcel state after save:" + parcelEntity.getState());
+        } catch (Exception e) {
+            log.error("The operation failed due to an error: {}", e.getMessage());
+            throw new BLException(null, "The operation failed due to an error: " + e.getMessage());
+        }
+    }
+
+    public NewParcelInfo submitNewParcel(Parcel parcel) throws BLValidationException {
+        String trackingId = randomAlphanumericTrackingId();
+
+        // check if tracking id already exists in database
+        // generate new tracking id if already exists
+        while(parcelRepository.findByTrackingId(trackingId) != null) {
+            trackingId = randomAlphanumericTrackingId();
+        }
+        saveParcelToDB(trackingId, parcel);
+        return new NewParcelInfo().trackingId(trackingId);
+    }
+
+    public TrackingInformation findParcelByTrackingId(String trackingId) throws BLDataNotFoundException {
+        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
+        if (parcelEntity != null) {
+            log.info("Parcel found with tracking id {}.", trackingId);
+            TrackingInformation trackingInformation = ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(parcelEntity);
+            log.info("ParcelEntity mapped to TrackingInformationDto.");
+            log.info("Parcel state: {}", trackingInformation.toString());
+            return trackingInformation;
+        } else {
+            log.error("Parcel does not exist with tracking id: {}", trackingId);
+            throw new BLDataNotFoundException(null, "Parcel does not exist with tracking id: " + trackingId);
+        }
+    }
+
+    public NewParcelInfo transitionParcel(String trackingId, Parcel parcel) throws BLException {
+
+        // check if tracking id already exists in database
+        if(parcelRepository.findByTrackingId(trackingId) != null) {
+            throw new BLException(null, "Tracking id already in use.");
+        }
+        saveParcelToDB(trackingId, parcel);
+        return new NewParcelInfo().trackingId(trackingId);
+    }
+
     public String randomAlphanumericTrackingId() {
         log.info("In ParcelLogic.randomAlphanumericTrackingId():");
         // generate alphanumeric tracking id that matches the given pattern "^[A-Z0-9]{9}$"
@@ -58,7 +114,7 @@ public class ParcelLogic {
         return generatedString;
     }
 
-    public NewParcelInfo saveNewParcel(Parcel parcel) throws BLValidationException {
+    public void saveParcelToDB(String trackingId, Parcel parcel) throws BLValidationException {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.dtoToEntity(parcel);
         log.info("Parcel mapped to ParcelEntity.");
         RecipientEntity recipientEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getRecipient());
@@ -67,7 +123,6 @@ public class ParcelLogic {
         log.info("(sender) Recipient mapped to RecipientEntity.");
 
         // create parcelEntity
-        String trackingId = randomAlphanumericTrackingId();
         parcelEntity.setTrackingId(trackingId);
         log.info("Tracking id set to {}.", parcelEntity.getTrackingId());
         parcelEntity.setState(State.PICKUP);
@@ -93,68 +148,5 @@ public class ParcelLogic {
         // Save to DB
         parcelRepository.save(parcelEntity);
         log.info("parcelEntity hase been saved in database");
-        NewParcelInfo newParcelInfo = new NewParcelInfo();
-        newParcelInfo.setTrackingId(trackingId);
-        return newParcelInfo;
-    }
-
-    public TrackingInformation findParcelByTrackingId(String trackingId) throws BLDataNotFoundException {
-        log.info("In ParcelLogic.findParcelByTrackingId():");
-        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
-        if (parcelEntity != null) {
-            log.info("    Parcel found with tracking id {}.", trackingId);
-            TrackingInformation trackingInformation = ParcelMapper.INSTANCE.parcelEntityToTrackingInformationDto(parcelEntity);
-            log.info("    ParcelEntity mapped to TrackingInformationDto.");
-            log.info("    Parcel state: {}", trackingInformation.toString());
-            return trackingInformation;
-        } else {
-            log.error("Parcel does not exist with tracking id: {}", trackingId);
-            throw new BLDataNotFoundException(null, "Parcel does not exist with tracking id: " + trackingId);
-        }
-    }
-
-    public NewParcelInfo transitionParcel(String trackingId, Parcel parcel) throws BLException {
-
-        // check if tracking id already exists in database
-        if(parcelRepository.findByTrackingId(trackingId) != null) {
-            throw new BLException(null, "Tracking id already in use.");
-        }
-
-        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.dtoToEntity(parcel);
-        log.info("Parcel mapped to ParcelEntity.");
-        RecipientEntity recipientEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getRecipient());
-        log.info("(recipient) Recipient mapped to RecipientEntity.");
-        RecipientEntity senderEntity = RecipientMapper.INSTANCE.dtoToEntity(parcel.getSender());
-        log.info("(sender) Recipient mapped to RecipientEntity.");
-
-        // create parcelEntity
-        // reuse existing tracking id
-        parcelEntity.setTrackingId(trackingId);
-        log.info("Tracking id set to {}.", parcelEntity.getTrackingId());
-        // set parcel state to "TRANSFERRED"
-        parcelEntity.setState(State.TRANSFERRED);
-        log.info("Parcel state set to {}.", parcelEntity.getState().toString());
-        parcelEntity.setRecipient(recipientEntity);
-        log.info("Recipient set to {}.", parcelEntity.getRecipient());
-        parcelEntity.setSender(senderEntity);
-        log.info("Sender set to {}.", parcelEntity.getSender());
-
-        //TODO: Get GPS coordinates for package sender/recipient (using Geo Encoding Proxy of your choice)
-        //TODO: generate visitedHops and futureHops between sender and recipient via GeoEncodingService()
-        parcelEntity.setFutureHops(new ArrayList<HopArrivalEntity>());
-        parcelEntity.setVisitedHops(new ArrayList<HopArrivalEntity>());
-
-        try {
-            BLValidator.INSTANCE.validate(parcelEntity);
-            log.info("ParcelEntity is validated.");
-        } catch (BLValidationException e) {
-            log.error("BLValidation failed due to an error: {}", e.getMessage());
-            throw new BLValidationException(e, "Validation of ParcelEntity failed.");
-        }
-
-        // Save to DB
-        parcelRepository.save(parcelEntity);
-        log.info("parcelEntity hase been saved in database");
-        return new NewParcelInfo().trackingId(trackingId);
     }
 }

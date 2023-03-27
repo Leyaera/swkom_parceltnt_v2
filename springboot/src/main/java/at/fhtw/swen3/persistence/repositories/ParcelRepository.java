@@ -14,11 +14,8 @@ public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 
     ParcelEntity findByTrackingId(String trackingId);
 
-    /*
     @Transactional
     @Modifying
-    @Query(value = "UPDATE parcel_entity  SET state = 4 WHERE tracking_id = :trackingid",nativeQuery = true)
+    @Query(value = "UPDATE parcel  SET state = 4 WHERE tracking_id = :trackingid",nativeQuery = true)
     void setStateToDelivered(@Param("trackingid") String trackingId);
-
-     */
 }

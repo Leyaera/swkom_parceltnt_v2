@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 
 public interface ParcelService {
 
+    void reportParcelDelivery(String TrackingId) throws BLException;
     NewParcelInfo submitParcel(Parcel parcel) throws BLValidationException;
     TrackingInformation trackParcel(String trackingId) throws BLDataNotFoundException;
-
     NewParcelInfo transitionParcel(String trackingId, Parcel parcel) throws BLException;
 
 }
