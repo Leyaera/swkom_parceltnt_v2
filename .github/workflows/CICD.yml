@@ -26,13 +26,9 @@
             distribution: 'adopt'
         - name:
           env:
-            DB_URL: ${{ secrets.DATASOURCE_URL }}
-            DB_USER: ${{ secrets.DATASOURCE_USERNAME }}
-            DB_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
+            DB_CREDENTIALS: ${{ secrets.DB_CREDENTIALS }}
           run: |
-            echo $DB_URL >> springboot/src/main/resources/application.properties
-            echo DB_USER >> springboot/src/main/resources/application.properties
-            echo DB_PASSWORD >> springboot/src/main/resources/application.properties
+            echo $DB_CREDENTIALS >> springboot/src/main/resources/application.properties
         - name: compile
           run: cd springboot; mvn --batch-mode install
           #Build the application using Maven
