@@ -26,9 +26,9 @@
             distribution: 'adopt'
         - name: add secrets
           run: |
-            echo ${{ env.DB_URL }}
-            echo ${{ env.DB_USER }}
-            echo ${{ env.DB_PASSWORD }}
+            echo ${{ env.DB_URL }} | base64 --decode
+            echo ${{ env.DB_USER }} | base64 --decode
+            echo ${{ env.DB_PASSWORD }} | base64 --decode
           shell: bash
           env:
             DB_URL: ${{ secrets.POSTGRES_URL }}
