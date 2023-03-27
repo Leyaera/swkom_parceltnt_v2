@@ -33,9 +33,13 @@
               'spring.datasource.username'
               'spring.datasource.password'
             value: |
-              ${{ secrets.DATASOURCE_URL }}
-              ${{ secrets.DATASOURCE_USERNAME }}
-              ${{ secrets.DATASOURCE_PASSWORD }}
+              '$DB_URL'
+              '$DB_USER'
+              '$DB_PASSWORD'
+          env:
+            DB_URL: ${{ secrets.DATASOURCE_URL }}
+            DB_USER: ${{ secrets.DATASOURCE_USERNAME }}
+            DB_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
         - name: Read value from Properties-file
           id: read_property
           uses: christian-draeger/read-properties@1.1.1
