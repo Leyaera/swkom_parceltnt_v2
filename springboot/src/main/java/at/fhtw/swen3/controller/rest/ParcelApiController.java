@@ -4,7 +4,9 @@ import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.services.exception.BLDataNotFoundException;
+import at.fhtw.swen3.services.exception.BLException;
 import at.fhtw.swen3.services.exception.BLValidationException;
+import at.fhtw.swen3.services.impl.ParcelService;
 import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,29 +29,29 @@ import javax.annotation.Generated;
 public class ParcelApiController implements ParcelApi {
 
     private final NativeWebRequest request;
-    private final ParcelServiceImpl parcelServiceImpl;
+    private final ParcelService parcelService;
 
     @Autowired
-    public ParcelApiController(NativeWebRequest request, ParcelServiceImpl parcelServiceImpl) {
+    public ParcelApiController(NativeWebRequest request, ParcelService parcelService) {
         this.request = request;
-        this.parcelServiceImpl = parcelServiceImpl;
+        this.parcelService = parcelService;
     }
 
     @Override
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
         try {
             try {
-                NewParcelInfo newParcelInfo = parcelServiceImpl.submitParcel(parcel);
+                NewParcelInfo newParcelInfo = parcelService.submitParcel(parcel);
                 if(newParcelInfo != null) {
                     log.info("Successfully submitted new parcel.");
                     return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
                 }
             } catch (BLValidationException e) {
-                log.error("BLValidation failed: {}", e.getMessage());
+                log.error("The operation failed due to an error: {}", e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            log.error("Request failed due to an error: {}", e.getMessage());
+            log.error("The address of sender or receiver was not found: {}", e.getMessage());
             return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_FOUND);
         }
         return null;
@@ -59,16 +61,31 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId) {
         try {
             try {
-                TrackingInformation trackingInformation = parcelServiceImpl.trackParcel(trackingId);
-                log.info("Parcel with tracking id {} exists.", trackingId);
+                TrackingInformation trackingInformation = parcelService.trackParcel(trackingId);
+                log.info("Successfully transitioned the parcel", trackingId);
                 return new ResponseEntity<TrackingInformation>(trackingInformation, HttpStatus.OK);
             } catch (BLDataNotFoundException e) {
-                log.error("BLDataNotFoundException: {}", e.getMessage());
+                log.error("Parcel does not exist with this tracking ID: {}", e.getMessage());
                 return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            log.error("Request failed due to an error: {}", e.getMessage());
+            log.error("The operation failed due to an error: {}", e.getMessage());
             return new ResponseEntity<TrackingInformation>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<NewParcelInfo> transitionParcel (String trackingId, Parcel parcel) {
+        NewParcelInfo newParcelInfo = null;
+        try {
+            newParcelInfo = parcelService.transitionParcel(trackingId, parcel);
+            return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.OK);
+        } catch (BLException e) {
+            log.error("A parcel with the specified trackingID is already in the system: {}", e.getMessage());
+            return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            log.error("The operation failed due to an error: {}", e.getMessage());
+            return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.BAD_REQUEST);
         }
     }
 
