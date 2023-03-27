@@ -1,24 +1,26 @@
 package at.fhtw.swen3.services.impl;
 
-import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
-import at.fhtw.swen3.persistence.entities.ParcelEntity;
-import at.fhtw.swen3.persistence.entities.RecipientEntity;
-import at.fhtw.swen3.persistence.entities.State;
+import at.fhtw.swen3.persistence.entities.*;
+import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
-import at.fhtw.swen3.persistence.repositories.RecipientRepository;
+import at.fhtw.swen3.persistence.repositories.TransferwarehouseRepository;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.TrackingInformation;
+import at.fhtw.swen3.services.dto.Transferwarehouse;
 import at.fhtw.swen3.services.exception.BLDataNotFoundException;
 import at.fhtw.swen3.services.exception.BLException;
 import at.fhtw.swen3.services.exception.BLValidationException;
+import at.fhtw.swen3.services.mapper.HopMapper;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.BLValidator;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,10 +29,15 @@ import java.util.Random;
 @Component
 public class ParcelLogic {
     private final ParcelRepository parcelRepository;
+    private final HopRepository hopRepository;
+
+    private final TransferwarehouseRepository transferwarehouseRepository;
 
     @Autowired
-    public ParcelLogic(ParcelRepository parcelRepository) {
+    public ParcelLogic(ParcelRepository parcelRepository, HopRepository hopRepository, TransferwarehouseRepository transferwarehouseRepository) {
         this.parcelRepository = parcelRepository;
+        this.hopRepository = hopRepository;
+        this.transferwarehouseRepository = transferwarehouseRepository;
     }
 
     public void reportParcelDelivery(String trackingId) throws BLException{
@@ -45,7 +52,58 @@ public class ParcelLogic {
         log.info("Parcel state after change:" + parcelEntity.getState());
 
         try {
-            parcelRepository.setStateToDelivered(trackingId);
+            // set state to DELIVERED(4) in DB
+            parcelRepository.setStateToDifferentState(State.DELIVERED.ordinal(), trackingId);
+            log.info("Parcel state after save:" + parcelEntity.getState());
+        } catch (Exception e) {
+            log.error("The operation failed due to an error: {}", e.getMessage());
+            throw new BLException(null, "The operation failed due to an error: " + e.getMessage());
+        }
+    }
+
+    public void reportParcelHop(String trackingId, String code) throws BLException {
+        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
+        if (parcelEntity == null) {
+            log.error("Parcel does not exist with this tracking ID {}", trackingId);
+            throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID: " + trackingId);
+        }
+
+        String hopType = hopRepository.findHopTypeByCode(code);
+        if (hopType == null) {
+            log.error("Hop does not exist with this code {}", code);
+            throw new BLDataNotFoundException(null, "Hop does not exist with this code: " + code);
+        }
+
+        log.info("Parcel state before change:" + parcelEntity.getState());
+
+        // case hop is type warehouse change parcel state to "INTRANSPORT"
+        if (hopType.equals("warehouse")) {
+            log.info("HopType is warehouse.");
+            parcelEntity.setState(State.INTRANSPORT);
+            log.info("Parcel state after change:" + parcelEntity.getState());
+        }
+        // case hop is type truck change parcel state to "INTRUCKDELIVERY"
+        if (hopType.equals("truck")){
+            log.info("HopType is truck.");
+            parcelEntity.setState(State.INTRUCKDELIVERY);
+            log.info("Parcel state after change:" + parcelEntity.getState());
+        }
+        // case hop is type transferwarehouse
+        if (hopType.equals("transferwarehouse")){
+            log.info("HopType is transferwarehouse.");
+
+            // TODO: call logistics partner api "POST https://<partnerUrl>/parcel/<trackingid>"
+            TransferwarehouseEntity transferwarehouseEntity = transferwarehouseRepository.getTransferwarehouseEntityByCode(code);
+            log.info("Logistigs partner url is: " + transferwarehouseEntity.getLogisticsPartnerUrl());
+
+            // change parcel state to TRANSFERRED
+            parcelEntity.setState(State.TRANSFERRED);
+            log.info("Parcel state after change:" + parcelEntity.getState());
+        }
+
+        try {
+            // save changed parcel state to in DB
+            parcelRepository.setStateToDifferentState(parcelEntity.getState().ordinal(), trackingId);
             log.info("Parcel state after save:" + parcelEntity.getState());
         } catch (Exception e) {
             log.error("The operation failed due to an error: {}", e.getMessage());

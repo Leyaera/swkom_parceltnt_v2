@@ -13,7 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.SubclassMapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(uses = {WarehouseNextHopsMapper.class})
 public interface HopMapper extends BasicMapper<HopEntity, Hop>{
     HopMapper INSTANCE = Mappers.getMapper(HopMapper.class);
 

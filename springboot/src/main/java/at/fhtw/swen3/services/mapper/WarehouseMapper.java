@@ -5,7 +5,7 @@ import at.fhtw.swen3.services.dto.Warehouse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {WarehouseNextHopsMapper.class, HopMapper.class})
+@Mapper(uses = {WarehouseNextHopsMapper.class})
 public interface WarehouseMapper extends BasicMapper<WarehouseEntity, Warehouse>{
     WarehouseMapper INSTANCE = Mappers.getMapper(WarehouseMapper.class);
 }

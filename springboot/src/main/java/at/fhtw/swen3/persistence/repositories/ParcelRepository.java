@@ -1,6 +1,7 @@
 package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
+import at.fhtw.swen3.persistence.entities.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +17,6 @@ public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE parcel  SET state = 4 WHERE tracking_id = :trackingid",nativeQuery = true)
-    void setStateToDelivered(@Param("trackingid") String trackingId);
+    @Query(value = "UPDATE parcel  SET state = :state WHERE tracking_id = :trackingid",nativeQuery = true)
+    void setStateToDifferentState(@Param("state") int state, @Param("trackingid") String trackingId);
 }

@@ -1,7 +1,9 @@
 package at.fhtw.swen3.services.impl;
 
+import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.RecipientRepository;
+import at.fhtw.swen3.persistence.repositories.TransferwarehouseRepository;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.Recipient;
@@ -20,11 +22,17 @@ class ParcelServiceImplTest {
     @Mock
     private ParcelRepository mockedParcelRepository;
 
+    @Mock
+    private HopRepository mockedHopRepository;
+
+    @Mock
+    private TransferwarehouseRepository mockedTransferwarehouseRepository;
+
     @BeforeEach
     public void init() {
 
         MockitoAnnotations.initMocks(this);
-        ParcelLogic parcelLogic = new ParcelLogic(mockedParcelRepository);
+        ParcelLogic parcelLogic = new ParcelLogic(mockedParcelRepository, mockedHopRepository, mockedTransferwarehouseRepository);
         parcelServiceImpl = new ParcelServiceImpl(parcelLogic);
 
         Recipient recipient = new Recipient();

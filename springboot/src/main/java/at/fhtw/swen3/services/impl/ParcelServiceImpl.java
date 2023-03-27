@@ -26,6 +26,11 @@ public class ParcelServiceImpl implements ParcelService {
     public void reportParcelDelivery(String trackingId) throws BLException {
         parcelLogic.reportParcelDelivery(trackingId);
     }
+
+    @Override
+    public void reportParcelHop(String trackingId, String code) throws BLException {
+        parcelLogic.reportParcelHop(trackingId, code);
+    }
     @Override
     public NewParcelInfo submitParcel(Parcel parcel) throws BLValidationException {
         // get random tracking ID
