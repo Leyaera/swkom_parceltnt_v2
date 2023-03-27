@@ -27,11 +27,9 @@
         - name: add secrets
           run: |
             echo ${{ secrets.DB_CREDENTIALS }} >> src/main/resources/application.properties
-
           shell: bash
         - name: compile
           run: cd springboot; mvn --batch-mode install
-          
           #Build the application using Maven
         - name: Upload JAR
           #This uploads artifacts from your workflow allowing you to share data between jobs and store data once a workflow is complete.
