@@ -47,7 +47,7 @@
             path: './springboot/src/main/resources/application.properties'
             properties: 'spring.datasource.url spring.datasource.username spring.datasource.password'
         - name: Do something with your bumped release version
-          run: echo ${{ steps.read_property.outputs.spring.datasource.url }}
+          run: echo ${{ steps.read_property.outputs.spring-datasource-url }}
           # will print "the value of 'the.key.of.a.property'"
         - name: compile
           run: cd springboot; mvn --batch-mode install
