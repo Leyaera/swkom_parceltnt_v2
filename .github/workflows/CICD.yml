@@ -24,6 +24,18 @@
           with:
             java-version: '17'
             distribution: 'adopt'
+        - name: Write value to Properties-file
+          uses: christian-draeger/write-properties@1.1.0
+          with:
+            path: './src/main/resources/application.properties'
+            property: |
+              'spring.datasource.url'
+              'spring.datasource.username'
+              'spring.datasource.password'
+            value: |
+              '${{ secrets.DATASOURCE_URL }}'
+              '${{ secrets.DATASOURCE_USERNAME }}'
+              '${{ secrets.DATASOURCE_PASSWORD }}'
         - name: compile
           run: cd springboot; mvn --batch-mode install
           #Build the application using Maven
