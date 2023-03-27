@@ -33,9 +33,9 @@
               'spring.datasource.username'
               'spring.datasource.password'
             value: |
-              '$DB_URL'
-              '$DB_USER'
-              '$DB_PASSWORD'
+              'jdbc:postgresql://parceltntdb.cjytmbar7arv.us-east-1.rds.amazonaws.com:5432/postgres'
+              'postgres'
+              'postgres'
           env:
             DB_URL: ${{ secrets.DATASOURCE_URL }}
             DB_USER: ${{ secrets.DATASOURCE_USERNAME }}
