@@ -29,6 +29,7 @@
             echo ${{ secrets.POSTGRES_URL }}
             echo ${{ secrets.POSTGRES_USERNAME }}
             echo ${{ secrets.POSTGRES_PASSWORD }}
+          shell: bash
         - name: compile
           run: cd springboot; mvn --batch-mode install
           
