@@ -24,11 +24,6 @@
           with:
             java-version: '17'
             distribution: 'adopt'
-        - name:
-          env:
-            DB_CREDENTIALS: ${{ secrets.DB_CREDENTIALS }}
-          run: |
-            echo $DB_CREDENTIALS >> springboot/src/main/resources/application.properties
         - name: compile
           run: cd springboot; mvn --batch-mode install
           #Build the application using Maven
