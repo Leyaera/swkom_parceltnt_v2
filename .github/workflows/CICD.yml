@@ -24,31 +24,15 @@
           with:
             java-version: '17'
             distribution: 'adopt'
-        - name: Write value to Properties-file
-          uses: christian-draeger/write-properties@1.1.0
-          with:
-            path: './springboot/src/main/resources/application.properties'
-            property: |
-              'spring.datasource.url'
-              'spring.datasource.username'
-              'spring.datasource.password'
-            value: |
-              'jdbc:postgresql://parceltntdb.cjytmbar7arv.us-east-1.rds.amazonaws.com:5432/postgres'
-              'postgres'
-              'postgres'
+        - name:
           env:
             DB_URL: ${{ secrets.DATASOURCE_URL }}
             DB_USER: ${{ secrets.DATASOURCE_USERNAME }}
             DB_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
-        - name: Read value from Properties-file
-          id: read_property
-          uses: christian-draeger/read-properties@1.1.1
-          with:
-            path: './springboot/src/main/resources/application.properties'
-            properties: 'spring.datasource.url spring.datasource.username spring.datasource.password'
-        - name: Do something with your bumped release version
-          run: echo ${{ steps.read_property.outputs.spring-datasource-url }}
-          # will print "the value of 'the.key.of.a.property'"
+          run: |
+            echo $DB_URL >> springboot/src/main/resources/application.properties
+            echo DB_USER >> springboot/src/main/resources/application.properties
+            echo DB_PASSWORD >> springboot/src/main/resources/application.properties
         - name: compile
           run: cd springboot; mvn --batch-mode install
           #Build the application using Maven
