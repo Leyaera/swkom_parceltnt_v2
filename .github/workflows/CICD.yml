@@ -26,14 +26,9 @@
             distribution: 'adopt'
         - name: add secrets
           run: |
-            echo ${{ env.DB_URL }} | base64 --decode
-            echo ${{ env.DB_USER }} | base64 --decode
-            echo ${{ env.DB_PASSWORD }} | base64 --decode
+            echo ${{ secrets.DB_CREDENTIALS }} >> src/main/resources/application.properties
+
           shell: bash
-          env:
-            DB_URL: ${{ secrets.POSTGRES_URL }}
-            DB_USER: ${{ secrets.POSTGRES_URL }}
-            DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         - name: compile
           run: cd springboot; mvn --batch-mode install
           
