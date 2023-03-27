@@ -26,10 +26,14 @@
             distribution: 'adopt'
         - name: add secrets
           run: |
-            echo ${{ secrets.POSTGRES_URL }}
-            echo ${{ secrets.POSTGRES_USERNAME }}
-            echo ${{ secrets.POSTGRES_PASSWORD }}
+            echo ${{ env.DB_URL }}
+            echo ${{ env.DB_USER }}
+            echo ${{ env.DB_PASSWORD }}
           shell: bash
+          env:
+            DB_URL: ${{ secrets.POSTGRES_URL }}
+            DB_USER: ${{ secrets.POSTGRES_URL }}
+            DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         - name: compile
           run: cd springboot; mvn --batch-mode install
           
