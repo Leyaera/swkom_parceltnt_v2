@@ -7,6 +7,7 @@ import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Warehouse;
 
 
+import at.fhtw.swen3.services.exception.BLDataNotFoundException;
 import at.fhtw.swen3.services.impl.WarehouseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,20 +48,55 @@ public class WarehouseApiController implements WarehouseApi {
         this.warehouseService = warehouseService;
     }
 
-    @Override
-    public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
-        try {
-            warehouseService.importWarehouses(warehouse);
-            return new ResponseEntity<Void>( HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error during importing warehouses: {}", e.getMessage());
-            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @Override
     public Optional<NativeWebRequest> getRequest() {
         return Optional.ofNullable(request);
     }
 
+    @Override
+    public ResponseEntity<Warehouse> exportWarehouses() {
+        try {
+            try {
+                Warehouse warehouse = warehouseService.exportWarehouses();
+                log.info("Successfully exported warehouses");
+                return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
+            } catch (BLDataNotFoundException e) {
+                log.error(e.getMessage());
+                return new ResponseEntity<Warehouse>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            log.error("The operation failed due to an error.: {}", e.getMessage());
+            return new ResponseEntity<Warehouse>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Hop> getWarehouse(String code) {
+        try {
+            try {
+                Hop hop = warehouseService.getHop(code);
+                log.info("Successfully returned hop with code: " + code);
+                return new ResponseEntity<Hop>(hop, HttpStatus.OK);
+            } catch (BLDataNotFoundException e) {
+                log.error(e.getMessage());
+                return new ResponseEntity<Hop>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            log.error("The operation failed due to an error.: {}", e.getMessage());
+            return new ResponseEntity<Hop>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
+        try {
+            warehouseService.importWarehouses(warehouse);
+            log.info("Successfully loaded.");
+            return new ResponseEntity<Void>( HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error during importing warehouses: {}", e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

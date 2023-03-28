@@ -14,4 +14,9 @@ public interface WarehouseNextHopsMapper extends BasicMapper<WarehouseNextHopsEn
     @SubclassMapping(source = Truck.class, target = TruckEntity.class)
     @SubclassMapping(source = Transferwarehouse.class, target = TransferwarehouseEntity.class)
     HopEntity hopToHopEntity(Hop hop);
+
+    @SubclassMapping(source = WarehouseEntity.class, target = Warehouse.class)
+    @SubclassMapping(source = TruckEntity.class, target = Truck.class)
+    @SubclassMapping(source = TransferwarehouseEntity.class, target = Transferwarehouse.class)
+    Hop hopEntityTopHop(HopEntity hopEntity);
 }

@@ -30,7 +30,6 @@ import java.util.Random;
 public class ParcelLogic {
     private final ParcelRepository parcelRepository;
     private final HopRepository hopRepository;
-
     private final TransferwarehouseRepository transferwarehouseRepository;
 
     @Autowired

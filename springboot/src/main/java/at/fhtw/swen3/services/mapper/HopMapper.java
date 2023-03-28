@@ -13,7 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.SubclassMapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {WarehouseNextHopsMapper.class})
+@Mapper(uses = {WarehouseNextHopsMapper.class, GeoCoordinateMapper.class})
 public interface HopMapper extends BasicMapper<HopEntity, Hop>{
     HopMapper INSTANCE = Mappers.getMapper(HopMapper.class);
 

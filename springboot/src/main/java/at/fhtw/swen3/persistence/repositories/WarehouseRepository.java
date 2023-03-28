@@ -10,5 +10,5 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Long> {
-    WarehouseEntity getWarehouseEntityByCode(String code);
+    WarehouseEntity getWarehouseEntityByLevel(int level);
 }

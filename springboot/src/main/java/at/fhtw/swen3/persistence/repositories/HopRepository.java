@@ -14,4 +14,6 @@ public interface HopRepository extends JpaRepository<HopEntity, Long> {
     @Transactional
     @Query(value ="SELECT hop_type FROM hop WHERE code = :code", nativeQuery = true)
     String findHopTypeByCode(@Param("code") String code);
+
+    HopEntity findHopEntityByCode(String code);
 }
