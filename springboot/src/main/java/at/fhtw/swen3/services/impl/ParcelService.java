@@ -7,7 +7,6 @@ import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.services.exception.BLDataNotFoundException;
 import at.fhtw.swen3.services.exception.BLException;
 import at.fhtw.swen3.services.exception.BLValidationException;
-import lombok.RequiredArgsConstructor;
 
 
 public interface ParcelService {

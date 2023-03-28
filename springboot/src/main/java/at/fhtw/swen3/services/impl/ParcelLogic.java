@@ -45,7 +45,8 @@ public class ParcelLogic {
             log.error("Parcel does not exist with this tracking ID {}", trackingId);
             throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID: " + trackingId);
         }
-        log.info("Parcel state:" + parcelEntity.getState());
+        log.info("Parcel state: " + parcelEntity.getState());
+        log.info("Parcel id: " + parcelEntity.getId());
 
         parcelEntity.setState(State.DELIVERED);
         log.info("Parcel state after change:" + parcelEntity.getState());

@@ -14,4 +14,7 @@ public class AppConfig {
 
     @Bean
     public WarehouseService warehouseService(WarehouseLogic warehouseLogic) { return new WarehouseServiceImpl(warehouseLogic); }
+
+    @Bean
+    public WebhookManager webhookManager(WebhookManagerLogic webhookManagerLogic) { return new WebhookManagerImpl(webhookManagerLogic); }
 }

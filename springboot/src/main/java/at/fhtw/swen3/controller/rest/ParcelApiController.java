@@ -7,7 +7,6 @@ import at.fhtw.swen3.services.exception.BLDataNotFoundException;
 import at.fhtw.swen3.services.exception.BLException;
 import at.fhtw.swen3.services.exception.BLValidationException;
 import at.fhtw.swen3.services.impl.ParcelService;
-import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
