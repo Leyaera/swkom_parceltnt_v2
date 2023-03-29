@@ -38,10 +38,10 @@ public class WebhookManagerLogic {
     public void registerWebhook(String trackingId) throws BLException {
         // find parcel in db
         ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
-        if(parcelEntity == null) {
+        /*if(parcelEntity == null) {
             log.error("Parcel does not exist with this tracking ID: " + trackingId);
             throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID: " + trackingId);
-        }
+        }*/
 
         // add recipient subscriber and save to db
         if(webhookRepository.findWebhookEntityByParcelTrackingIdAndSubscriberId(trackingId, parcelEntity.getRecipient().getId()) == null) {

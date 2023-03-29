@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,7 +31,7 @@ public class ParcelApiControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private static ParcelRepository parcelRepository;
+    private ParcelRepository parcelRepository;
 
     private static String trackingId;
 
@@ -53,6 +54,7 @@ public class ParcelApiControllerIntegrationTest {
     @DisplayName("Successful journey of a Parcel from Submitting to Delivery.")
     void testParcelFromSubmitToDelivered() throws Exception {
         submitParcel();
+        setWebhooksAfterSubmit();
         trackParcelAfterSubmit();
         reportHopArrivalTruck();
         trackParcelAfterHopArrivalTruck();
@@ -60,6 +62,7 @@ public class ParcelApiControllerIntegrationTest {
         trackParcelAfterHopArrivalWarehouse();
         reportFinalDelivery();
         trackParcelDelivered();
+        deleteWebhooksAfterDelivery();
     }
 
     void submitParcel() throws Exception {
@@ -86,6 +89,12 @@ public class ParcelApiControllerIntegrationTest {
                 .andReturn();
         JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
         trackingId = jsonObject.get("trackingId").toString();
+    }
+
+    void setWebhooksAfterSubmit() throws Exception {
+        MvcResult result = mockMvc.perform(post("/webhook/" + trackingId))
+                .andExpect(status().isCreated())
+                .andReturn();
     }
 
     void trackParcelAfterSubmit() throws Exception {
@@ -144,5 +153,12 @@ public class ParcelApiControllerIntegrationTest {
         JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
         log.info("response is: " + result.getResponse().getContentAsString());
         assertEquals("Delivered", jsonObject.get("state"));
+    }
+
+    void deleteWebhooksAfterDelivery() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/webhook/" + trackingId))
+                .andExpect(status().isOk())
+                .andReturn();
     }
 }

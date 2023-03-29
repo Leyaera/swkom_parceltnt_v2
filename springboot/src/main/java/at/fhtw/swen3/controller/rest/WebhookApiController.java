@@ -35,7 +35,7 @@ public class WebhookApiController implements WebhookApi {
             try {
                 webhookManager.registerWebhook(trackingId);
                 log.info("Successfully submitted webhook.");
-                return new ResponseEntity<Void>(HttpStatus.OK);
+                return new ResponseEntity<Void>(HttpStatus.CREATED);
             } catch (BLException e) {
                 log.error("Parcel does not exist with this tracking ID: {}", e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
