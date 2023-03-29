@@ -93,7 +93,7 @@ public class WarehouseApiController implements WarehouseApi {
         try {
             warehouseService.importWarehouses(warehouse);
             log.info("Successfully loaded.");
-            return new ResponseEntity<Void>( HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error during importing warehouses: {}", e.getMessage());
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);

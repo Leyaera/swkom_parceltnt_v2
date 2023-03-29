@@ -1,4 +1,11 @@
+/* This is a bad example of an Integration test
+ * Tests have been split but are now dependent on each other in a specific order.
+ * This is an anti-pattern in unit tests, but helpful in integration tests.
+ * see: https://www.baeldung.com/junit-testinstance-annotation
+ */
+
 package at.fhtw.swen3;
+
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 
@@ -6,8 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,15 +30,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = OpenApiGeneratorApplication.class)
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ParcelApiControllerIntegrationTest {
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class ParcelApiControllerTestBad {
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private static ParcelRepository parcelRepository;
+    private ParcelRepository parcelRepository;
 
-    private static String trackingId;
+    static private String trackingId;
+
+    @BeforeAll
+    void retrieveTrackingId() throws Exception {
+        trackingId = submitParcel();
+    }
 
     @AfterAll
     void deleteParcelFromDB() {
@@ -40,29 +51,7 @@ public class ParcelApiControllerIntegrationTest {
         parcelRepository.delete(parcelEntity);
     }
 
-    @Test
-    @DisplayName("SubmitParcel fails.")
-    void FailSubmitParcel() throws Exception {
-        mockMvc.perform(post("/parcel")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content((byte[]) null))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("Successful journey of a Parcel from Submitting to Delivery.")
-    void testParcelFromSubmitToDelivered() throws Exception {
-        submitParcel();
-        trackParcelAfterSubmit();
-        reportHopArrivalTruck();
-        trackParcelAfterHopArrivalTruck();
-        reportHopArrivalWarehouse();
-        trackParcelAfterHopArrivalWarehouse();
-        reportFinalDelivery();
-        trackParcelDelivered();
-    }
-
-    void submitParcel() throws Exception {
+    String submitParcel() throws Exception {
         String parcel ="{\"weight\": 2.5,\n" +
                 "\"recipient\": {\n" +
                 "\"name\": \"Max Mustermann\",\n" +
@@ -85,9 +74,10 @@ public class ParcelApiControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
         JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
-        trackingId = jsonObject.get("trackingId").toString();
+        return jsonObject.get("trackingId").toString();
     }
-
+    @Test
+    @Order(1)
     void trackParcelAfterSubmit() throws Exception {
         // track Parcel after submit
         MvcResult result = mockMvc.perform(get("/parcel/" + trackingId))
@@ -97,6 +87,8 @@ public class ParcelApiControllerIntegrationTest {
         assertEquals("Pickup", jsonObject.get("state"));
     }
 
+    @Test
+    @Order(2)
     void reportHopArrivalTruck() throws Exception {
         // reportHopArrival Truck
         mockMvc.perform(post("/parcel/" + trackingId + "/reportHop/WTTA015"))
@@ -104,6 +96,8 @@ public class ParcelApiControllerIntegrationTest {
                 .andReturn();
     }
 
+    @Test
+    @Order(3)
     void trackParcelAfterHopArrivalTruck() throws Exception {
         // track Parcel after HopArrival Truck
         MvcResult result = mockMvc.perform(get("/parcel/" + trackingId))
@@ -113,6 +107,8 @@ public class ParcelApiControllerIntegrationTest {
         assertEquals("InTruckDelivery", jsonObject.get("state"));
     }
 
+    @Test
+    @Order(4)
     void reportHopArrivalWarehouse() throws Exception {
         // reportHopArrival Warehouse
         mockMvc.perform(post("/parcel/" + trackingId + "/reportHop/WENA03"))
@@ -120,6 +116,8 @@ public class ParcelApiControllerIntegrationTest {
                 .andReturn();
     }
 
+    @Test
+    @Order(5)
     void trackParcelAfterHopArrivalWarehouse() throws Exception {
         // track Parcel after HopArrival Warehouse
         MvcResult result = mockMvc.perform(get("/parcel/" + trackingId))
@@ -129,6 +127,9 @@ public class ParcelApiControllerIntegrationTest {
         log.info("response is: " + result.getResponse().getContentAsString());
         assertEquals("InTransport", jsonObject.get("state"));
     }
+
+    @Test
+    @Order(6)
     void reportFinalDelivery() throws Exception {
         // report final delivery
         mockMvc.perform(post("/parcel/" + trackingId + "/reportDelivery/"))
@@ -136,6 +137,8 @@ public class ParcelApiControllerIntegrationTest {
                 .andReturn();
     }
 
+    @Test
+    @Order(7)
     void trackParcelDelivered() throws Exception {
         // track Parcel after Delivery
         MvcResult result = mockMvc.perform(get("/parcel/" + trackingId))

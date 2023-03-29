@@ -64,7 +64,7 @@ public interface WebhookApi {
     }
 
     /**
-     * GET /webhook/{trackingId} : Report webhook to all subscribers.
+     * GET /webhook/{trackingId} : Get list of all subscribers by tracking id.
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
      * @return Successfully retrieved list of subscribers. (status code 200)
